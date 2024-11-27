@@ -131,6 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 594794491}
+  - component: {fileID: 594794494}
   - component: {fileID: 594794493}
   - component: {fileID: 594794492}
   m_Layer: 0
@@ -164,10 +165,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 594794490}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c47a55e6b5d57a44ac39f5f93f9544d, type: 3}
+  m_Script: {fileID: 11500000, guid: e2b8b31f905e4104a80c6550eb3bd342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cubePrefab: {fileID: 4166512637669554646, guid: 160f56a8143a99e47844fe4a9b347cc9, type: 3}
+  minValue: -8
+  maxValue: 8
+  _delay: 0.3
 --- !u!114 &594794493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,12 +180,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 594794490}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2b8b31f905e4104a80c6550eb3bd342, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c47a55e6b5d57a44ac39f5f93f9544d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minValue: -8
-  maxValue: 8
-  _delay: 0.232
+--- !u!114 &594794494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594794490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02be3d5517d748e44911a737d3d23082, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cubePrefab: {fileID: 4166512637669554646, guid: 160f56a8143a99e47844fe4a9b347cc9, type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

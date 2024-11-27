@@ -1,36 +1,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(CubeFactory))]
 public class CubePool : MonoBehaviour
 {
-    [SerializeField] private Cube _cubePrefab;
-    
+    private CubeFactory _cubeFactory;
     private Queue<Cube> _cubesPool = new Queue<Cube>();
+
+    private void Awake()
+    {
+        _cubeFactory = GetComponent<CubeFactory>();
+    }
 
     public Cube Get()
     {
         if (_cubesPool.Count == 0)
-            Add(CreateCube());
-        
-        Cube cube = _cubesPool.Dequeue();
-        cube.gameObject.SetActive(true);
-        
-        return cube;
+            Add(_cubeFactory.Create());
+
+        return _cubesPool.Dequeue();;
     }
 
     public void Add(Cube cube)
     {
         if (cube is not null)
-        {
-            cube.gameObject.SetActive(false);
             _cubesPool.Enqueue(cube);
-        }
-    }
-
-    private Cube CreateCube()
-    {
-        Cube cube = Instantiate(_cubePrefab);
-        cube.gameObject.SetActive(false);
-        return cube;
     }
 }

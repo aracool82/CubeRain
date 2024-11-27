@@ -7,10 +7,10 @@ public class Spawner : MonoBehaviour
 {
     [SerializeField] private int minValue = -10;
     [SerializeField] private int maxValue = 10;
-    [SerializeField,Range(0.05f,0.4f)] private float _delay = 0.1f;
+    [SerializeField, Range(0.1f, 1f)] private float _delay = 0.1f;
 
-    private Vector3 _spawnPosition;
     private CubePool _cubePool;
+    private Vector3 _spawnPosition;
     private WaitForSeconds _wait;
 
     private void Awake()
@@ -30,16 +30,27 @@ public class Spawner : MonoBehaviour
         while (true)
         {
             yield return _wait;
-            
+
             Cube cube = _cubePool.Get();
-            cube.Init(_cubePool);
+            
+            cube.gameObject.SetActive(true);
             cube.transform.position = GetRandomPosition();
             cube.transform.SetParent(transform);
+
+            cube.Touched += OnReturnInPool;
         }
+    }
+
+    private void OnReturnInPool(Cube cube)
+    {
+        cube.Touched -= OnReturnInPool;
+        cube.gameObject.SetActive(false);
+        _cubePool.Add(cube);
     }
 
     private Vector3 GetRandomPosition()
     {
-        return new Vector3(Random.Range(minValue, maxValue + 1), 0, Random.Range(minValue, maxValue + 1)) + _spawnPosition;
+        return new Vector3(Random.Range(minValue, maxValue + 1), 0, Random.Range(minValue, maxValue + 1)) +
+               _spawnPosition;
     }
 }

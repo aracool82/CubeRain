@@ -1,50 +1,69 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(Renderer))]
 public class Cube : MonoBehaviour
 {
+    private Renderer _renderer;
     private CubePool _cubePool;
-    private int _minDelay = 2;
-    private int _maxDelay = 5;
-    private int _delay;
     private WaitForSeconds _wait;
     
-    public bool IsTouch { get; private set; }
+    private int _minDelay = 2;
+    private int _maxDelay = 5;
+    private float _delay;
 
-    public void Init(CubePool cubePool) 
+    private bool _isTouch;
+
+    public bool IsTouch
     {
-        SetDelay();
-        ChangeColor(Color.red);
-        
-        _cubePool = cubePool;
-        _wait = new WaitForSeconds(_delay);
+        get => _isTouch;
+        private set
+        {
+            if (value == true)
+                _renderer.material.color = Color.green;
+            else
+                _renderer.material.color = Color.red;
+            
+            SetDelay();
+            _isTouch = value;
+        }
+    }
+
+    public event Action<Cube> Touched;
+
+    private void Awake()
+    {
+        _renderer = GetComponent<Renderer>();
+    }
+
+    private void OnEnable()
+    {
         IsTouch = false;
     }
 
-    public void SetIsTouch(bool isTouch)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (isTouch == true)
-        {
-            IsTouch = true;
-            ChangeColor(Color.green);
-            StartCoroutine(DisableWithDelay());
-        }
+        if (collision.gameObject.TryGetComponent(out Platform platform))
+            Touch();
+    }
+
+    private void Touch()
+    {
+        IsTouch = true;
+        StartCoroutine(DisableWithDelay());
     }
 
     private IEnumerator DisableWithDelay()
     {
         yield return _wait;
-        _cubePool.Add(this);
+        Touched?.Invoke(this);
     }
 
     private void SetDelay()
     {
         _delay = Random.Range(_minDelay, _maxDelay + 1);
-    }
-
-    private void ChangeColor(Color color)
-    {
-        GetComponent<Renderer>().material.color = color;
+        _wait = new WaitForSeconds(_delay);
     }
 }
